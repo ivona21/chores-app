@@ -5,8 +5,9 @@ import { AppComponent } from './app.component';
 import { CustomMaterialModule } from './custom-material.module';
 import { HeaderComponent } from "./header/header.component";
 import { HomeComponent } from './home/home.component';
-import { ChoreListComponent } from "./chores/chore-list/chore-list.component";
+import { ChoreListComponent } from "./chores/chores-management/chore-list.component";
 import { ChoresService } from "./chores/chores.service";
+import { AppRouterModule } from "./app-routing.module";
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { ChoresService } from "./chores/chores.service";
   ],
   imports: [
     BrowserModule,
-    CustomMaterialModule
+    CustomMaterialModule,
+    AppRouterModule
   ],
   providers: [ChoresService],
   bootstrap: [AppComponent]

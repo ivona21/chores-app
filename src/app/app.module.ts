@@ -5,19 +5,22 @@ import { AppComponent } from './app.component';
 import { CustomMaterialModule } from './custom-material.module';
 import { HeaderComponent } from "./header/header.component";
 import { HomeComponent } from './home/home.component';
+import { ChoreListComponent } from "./chores/chore-list/chore-list.component";
+import { ChoresService } from "./chores/chores.service";
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    HomeComponent
+    HomeComponent,
+    ChoreListComponent
   ],
   imports: [
     BrowserModule,
     CustomMaterialModule
   ],
-  providers: [],
+  providers: [ChoresService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,38 @@
+<div fxLayout="column">
+        <div>
+            <section class="mat-typography">
+                <h1>Chores: </h1>
+            </section>              
+        </div>
+        <mat-table #table [dataSource]="dataSource" class="mat-elevation-z6">
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                <mat-cell *matCellDef="let chore" (click)="onCellClick(chore)" class="pointer"> {{chore.name}} </mat-cell>
+            </ng-container>
+
+            <!-- Frequency Column -->
+            <ng-container matColumnDef="frequency">
+                <mat-header-cell *matHeaderCellDef> Frequency </mat-header-cell>
+                <mat-cell *matCellDef="let chore"> {{chore.frequency}} </mat-cell>
+            </ng-container>
+
+            <!-- Last time Column -->
+            <ng-container matColumnDef="last-time">
+                <mat-header-cell *matHeaderCellDef> Last Time </mat-header-cell>
+                <mat-cell *matCellDef="let chore"> {{chore.lastTime | date}} </mat-cell>
+            </ng-container>
+
+            <!-- Next time Column -->
+            <ng-container matColumnDef="next-time">
+                <mat-header-cell *matHeaderCellDef> Next Time </mat-header-cell>
+                <mat-cell *matCellDef="let chore"> {{chore.nextTime | date}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <div fxLayout="row-reverse" class="margin-top-30">
+            <button mat-raised-button color="accent" fxFlex="20" (click)="onAddNewChore()">Add new chore</button>
+        </div>
+    </div>

@@ -5,7 +5,10 @@ import { AppComponent } from './app.component';
 import { CustomMaterialModule } from './custom-material.module';
 import { HeaderComponent } from "./header/header.component";
 import { HomeComponent } from './home/home.component';
-import { ChoreListComponent } from "./chores/chores-management/chore-list.component";
+import { ChoresComponent } from "./chores/chores.component";
+import { ChoreListComponent } from "./chores/chore-list/chore-list.component";
+import { AddChoreComponent } from "./chores/add-chore/add-chore.component";
+import { EditChoreComponent } from "./chores/edit-chore/edit-chore.component";
 import { ChoresService } from "./chores/chores.service";
 import { AppRouterModule } from "./app-routing.module";
 
@@ -15,7 +18,10 @@ import { AppRouterModule } from "./app-routing.module";
     AppComponent,
     HeaderComponent,
     HomeComponent,
-    ChoreListComponent
+    ChoresComponent,
+    ChoreListComponent,
+    AddChoreComponent,
+    EditChoreComponent
   ],
   imports: [
     BrowserModule,

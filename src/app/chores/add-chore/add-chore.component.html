@@ -1,1 +1,16 @@
-Here will be form for adding chores
+<div>
+    <div>
+        <section class="mat-typography">
+            <h1>Create chore </h1>
+        </section>
+    </div>
+    <form [formGroup]="createChoreForm" (ngSubmit)="onSubmit()">
+        <!-- <mat-form-field>
+            <input matInput matFormFieldControl type="text" formControlName="name" id="name" name="name" placeholder="Name">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput matFormFieldControl type="number" fromControlName="frequency" id="frequency" name="frequency">
+        </mat-form-field>    
+        <button mat-raised-button color="accent" type="submit">Submit</button>   -->
+    </form>
+</div>

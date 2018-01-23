@@ -11,6 +11,7 @@ import { AddChoreComponent } from "./chores/add-chore/add-chore.component";
 import { EditChoreComponent } from "./chores/edit-chore/edit-chore.component";
 import { ChoresService } from "./chores/chores.service";
 import { AppRouterModule } from "./app-routing.module";
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -25,6 +26,8 @@ import { AppRouterModule } from "./app-routing.module";
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     CustomMaterialModule,
     AppRouterModule
   ],

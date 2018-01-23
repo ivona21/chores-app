@@ -1,29 +1,42 @@
-import { Component } from "@angular/core";
-import { FormGroup, FormControl, FormBuilder } from "@angular/forms";
+import { Component, OnInit } from "@angular/core";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { Router, ActivatedRoute } from "@angular/router";
+import { ChoresService } from "../chores.service";
+import { Chore } from "../chore.model";
 
 @Component({
     selector: "app-add-chore",
     templateUrl: "./add-chore.component.html",
     styleUrls: ["./add-chore.component.css"]
 })
-export class AddChoreComponent {
-    createChoreForm: FormGroup;   
+export class AddChoreComponent implements OnInit {
+    createChoreForm: FormGroup;
+    constructor(private router: Router,
+                private route: ActivatedRoute,
+                private choresService: ChoresService) { }
 
-    constructor(fb: FormBuilder) {
-        // this.createChoreForm = fb.group({
-        //     floatLabel: "auto"
-        // })
+    ngOnInit() {
         this.initForm();
     }
 
     initForm() {
         this.createChoreForm = new FormGroup({
-            "name": new FormControl(),
-            "frequency": new FormControl()
-        });        
+            "name": new FormControl(null, [Validators.required]),
+            "frequency": new FormControl(null, [Validators.required, Validators.min(1)]),
+            "last-time": new FormControl(null, [Validators.required])
+        });
     }
 
-    onSubmit(){
-        console.log(this.createChoreForm);
+    private clearForm(){
+        this.createChoreForm.reset();
+    }
+
+    onSubmit() {
+        let chore: Chore = new Chore(this.createChoreForm.value["name"],
+                                     this.createChoreForm.value["frequency"],
+                                     this.createChoreForm.value["lastTime"]);
+        this.choresService.addChore(chore);
+        this.clearForm();
+        this.router.navigate(["chores"])
     }
 }

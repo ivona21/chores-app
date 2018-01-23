@@ -1,6 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatTableDataSource } from "@angular/material";
+
+import { Subscription } from "rxjs/Subscription";
 
 import { Chore } from "../chore.model";
 import { ChoresService } from "../chores.service";
@@ -11,25 +13,37 @@ import { ChoresService } from "../chores.service";
     templateUrl: "./chore-list.component.html",
     styleUrls: ["./chore-list.component.css"]
 })
-export class ChoreListComponent implements OnInit {
+export class ChoreListComponent implements OnInit, OnDestroy {
     chores: Chore[];
     dataSource: MatTableDataSource<Chore>;
-    displayedColumns = ["name", "frequency", "last-time", "next-time"]
+    displayedColumns = ["name", "frequency", "last-time", "next-time"];
+    subscription: Subscription;
 
     constructor(private router: Router,
-                private route: ActivatedRoute, 
-                private choresService: ChoresService) { }
+        private route: ActivatedRoute,
+        private choresService: ChoresService) { }
 
     ngOnInit() {
         this.chores = this.choresService.getChores();
-        this.dataSource = new MatTableDataSource(this.chores)
-    }
+        this.subscription = this.choresService.choresChanged
+            .subscribe(
+            (chores: Chore[]) => {
+                this.chores = chores;     
+                this.dataSource = new MatTableDataSource(this.chores);         
+            })
+
+        this.dataSource = new MatTableDataSource(this.chores);
+    }    
 
     onAddNewChore() {
-        this.router.navigate(["new"], { relativeTo: this.route})
+        this.router.navigate(["new"], { relativeTo: this.route })
     }
 
     onCellClick(chore: Chore) {
-        this.router.navigate([chore.id, "edit"], {relativeTo: this.route});
+        this.router.navigate([chore.id, "edit"], { relativeTo: this.route });
+    }
+
+    ngOnDestroy(){
+        this.subscription.unsubscribe();
     }
 }

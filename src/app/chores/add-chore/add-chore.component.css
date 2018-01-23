@@ -9,3 +9,11 @@ form {
 form * {
     font-size: 14px;
 }
+
+.form-container {
+    padding-bottom: 40px;
+}
+
+button {
+    float: right;
+}

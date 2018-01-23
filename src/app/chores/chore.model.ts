@@ -5,8 +5,8 @@ export class Chore {
     public lastTime: Date;
     public nextTime: Date;
 
-    constructor(id: number, name: string, frequency: number, lastTime: Date) {
-        this.id = id;
+    constructor(name: string, frequency: number, lastTime: Date) {
+        this.id = Date.now();
         this.name = name;
         this.frequency = frequency;
         this.lastTime = lastTime ? lastTime : new Date();

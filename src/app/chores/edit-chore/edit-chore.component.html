@@ -1,1 +1,23 @@
-<h2>Here will be form for EDITING {{ chore.name }}</h2>
+<div>
+    <div>
+        <section class="mat-typography">
+            <h1>Edit {{chore.name}} </h1>
+        </section>
+    </div>
+    <div class="mat-elevation-z5 form-container">
+        <form [formGroup]="editChoreForm" (ngSubmit)="onSubmit()">
+            <mat-form-field>
+                <input matInput type="text" formControlName="name" id="name" name="name" placeholder="Name">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="number" formControlName="frequency" id="frequency" name="frequency" placeholder="Frequency in days">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput [matDatepicker]="lastTime" placeholder="Last time done" formControlName="last-time">
+                <mat-datepicker-toggle matSuffix [for]="lastTime"></mat-datepicker-toggle>
+                <mat-datepicker #lastTime></mat-datepicker>
+            </mat-form-field>
+            <button mat-raised-button color="accent" type="submit" [disabled]="!editChoreForm.valid">Submit</button>
+        </form>
+    </div>
+</div>

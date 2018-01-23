@@ -24,6 +24,6 @@ export class AddChoreComponent {
     }
 
     onSubmit(){
-
+        console.log(this.createChoreForm);
     }
 }

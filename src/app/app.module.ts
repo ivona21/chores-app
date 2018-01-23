@@ -12,6 +12,7 @@ import { EditChoreComponent } from "./chores/edit-chore/edit-chore.component";
 import { ChoresService } from "./chores/chores.service";
 import { AppRouterModule } from "./app-routing.module";
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
     CustomMaterialModule,
     AppRouterModule
   ],

@@ -18,4 +18,11 @@ export class ChoresService {
         this.chores.push(newChore);
         this.choresChanged.next(this.chores);
     }
+
+    getById(id: number) : Chore {
+        let found = this.chores.find((chore) => {
+            return chore.id === id;
+        })
+        return found;
+    }
 }

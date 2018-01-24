@@ -18,6 +18,7 @@ export class ChoreListComponent implements OnInit, OnDestroy {
     dataSource: MatTableDataSource<Chore>;
     displayedColumns = ["name", "frequency", "last-time", "next-time"];
     subscription: Subscription;
+    selectedRowIndex: number = -1;
 
     constructor(private router: Router,
         private route: ActivatedRoute,
@@ -37,10 +38,12 @@ export class ChoreListComponent implements OnInit, OnDestroy {
 
     onAddNewChore() {
         this.router.navigate(["new"], { relativeTo: this.route })
-    }
+    }    
 
-    onCellClick(chore: Chore) {
-        this.router.navigate([chore.id, "edit"], { relativeTo: this.route });
+    onRowClick(row){
+        this.selectedRowIndex = row.id;
+        this.router.navigate([row.id, "edit"], {relativeTo: this.route});
+        console.log(row);
     }
 
     ngOnDestroy(){

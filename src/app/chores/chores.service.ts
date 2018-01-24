@@ -6,8 +6,8 @@ export class ChoresService {
     choresChanged = new Subject<Chore []>();
 
     chores : Chore [] = [
-        new Chore("vacuuming", 7, new Date()),
-        new Chore("brushing carpet", 30, new Date())
+        new Chore(1, "vacuuming", 7, new Date()),
+        new Chore(2, "brushing carpet", 30, new Date())
     ]
 
     getChores(){
@@ -26,11 +26,10 @@ export class ChoresService {
         this.choresChanged.next(this.chores.slice());
     }
 
-    updateChore(id: number, chore: Chore){
-        let foundIndex = this.chores.findIndex(x => x.id === id);
-        this.chores[foundIndex] = chore;
+    updateChore(chore: Chore){
+        let foundIndex = this.chores.findIndex(x => x.id === chore.id);      
+        let brandNew : Chore = new Chore(chore.id, chore.name, chore.frequency, chore.lastTime);
+        this.chores[foundIndex] = brandNew;
         this.choresChanged.next(this.chores.slice());
-    }
-
-   
+    }   
 }

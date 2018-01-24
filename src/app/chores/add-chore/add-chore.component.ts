@@ -23,7 +23,7 @@ export class AddChoreComponent implements OnInit {
         this.createChoreForm = new FormGroup({
             "name": new FormControl(null, [Validators.required]),
             "frequency": new FormControl(null, [Validators.required, Validators.min(1)]),
-            "last-time": new FormControl(null, [Validators.required])
+            "lastTime": new FormControl(null, [Validators.required])
         });
     }
 
@@ -32,7 +32,8 @@ export class AddChoreComponent implements OnInit {
     }
 
     onSubmit() {
-        let chore: Chore = new Chore(this.createChoreForm.value["name"],
+        let chore: Chore = new Chore(0,
+                                     this.createChoreForm.value["name"],
                                      this.createChoreForm.value["frequency"],
                                      this.createChoreForm.value["lastTime"]);
         this.choresService.addChore(chore);

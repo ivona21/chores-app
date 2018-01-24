@@ -8,7 +8,7 @@
             <!-- Name Column -->
             <ng-container matColumnDef="name">
                 <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-                <mat-cell *matCellDef="let chore" (click)="onCellClick(chore)" class="pointer"> {{chore.name}} </mat-cell>
+                <mat-cell *matCellDef="let chore"> {{chore.name}}  </mat-cell>
             </ng-container>
 
             <!-- Frequency Column -->
@@ -30,7 +30,7 @@
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)" [ngClass]="{'highlight': selectedRowIndex === row.id }"></mat-row>
         </mat-table>
         <div fxLayout="row-reverse" class="margin-top-30">
             <button mat-raised-button color="accent" fxFlex="20" (click)="onAddNewChore()">Add new chore</button>

@@ -5,8 +5,8 @@ export class Chore {
     public lastTime: Date;
     public nextTime: Date;
 
-    constructor(name: string, frequency: number, lastTime: Date) {
-        this.id = Date.now();
+    constructor(id: number, name: string, frequency: number, lastTime: Date) {
+        this.id = id ? id : Math.random();
         this.name = name;
         this.frequency = frequency;
         this.lastTime = lastTime ? lastTime : new Date();
@@ -15,7 +15,7 @@ export class Chore {
 
     private calculateNextTime(): Date {
         let nextTime = new Date();
-        nextTime.setDate(nextTime.getDate() + this.frequency);
+        nextTime.setDate(this.lastTime.getDate() + this.frequency);
         return nextTime;
     }
 }

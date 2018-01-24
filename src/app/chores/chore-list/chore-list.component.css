@@ -1,4 +1,7 @@
-.pointer {
+mat-row {
     cursor: pointer;
 }
-  
+
+.highlight {
+    background-color: #e6e6e6;  
+}

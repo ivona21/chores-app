@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Params } from "@angular/router";
+import { Router, ActivatedRoute, Params } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Chore } from "../chore.model";
 import { ChoresService } from "../chores.service";
@@ -14,12 +14,11 @@ export class EditChoreComponent implements OnInit {
     id: number;
     editChoreForm: FormGroup;
 
-    constructor(private route: ActivatedRoute,
-        private choresService: ChoresService) { }
+    constructor(private router: Router,
+                private route: ActivatedRoute,
+                private choresService: ChoresService) { }
 
-    ngOnInit() {
-
-        
+    ngOnInit() {        
         this.route.params
             .subscribe(
             (params: Params) => {
@@ -38,6 +37,8 @@ export class EditChoreComponent implements OnInit {
     }
 
     onSubmit(){
-        console.log(this.chore);
+        this.choresService.updateChore(this.chore); 
+        this.editChoreForm.reset();
+        this.router.navigate(["chores"]);
     }
 }

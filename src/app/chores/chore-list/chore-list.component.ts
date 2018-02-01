@@ -25,15 +25,14 @@ export class ChoreListComponent implements OnInit, OnDestroy {
         private choresService: ChoresService) { }
 
     ngOnInit() {
-        this.chores = this.choresService.getChores();
+        this.choresService.getChores();       
+
         this.subscription = this.choresService.choresChanged
             .subscribe(
             (chores: Chore[]) => {
                 this.chores = chores;     
                 this.dataSource = new MatTableDataSource(this.chores);         
-            })
-
-        this.dataSource = new MatTableDataSource(this.chores);
+            })       
     }    
 
     onAddNewChore() {

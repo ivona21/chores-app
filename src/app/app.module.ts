@@ -13,6 +13,7 @@ import { ChoresService } from "./chores/chores.service";
 import { AppRouterModule } from "./app-routing.module";
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
+import { HttpModule } from '@angular/http';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    HttpModule,
     CustomMaterialModule,
     AppRouterModule
   ],

@@ -15,21 +15,42 @@ export class ChoresService {
     getChores() {        
         this.http.get(this.url + "chores.json").subscribe(
             (response: Response) => {
-                this.chores = Object.values(JSON.parse(response["_body"]) || [])
-                    .map(
-                        (chore: Chore) => {
-                            let modifiedChore : Chore = new Chore(chore.id, chore.name, chore.frequency, new Date(chore.lastTime));
-                            return modifiedChore;
-                        });                
-                this.choresChanged.next(this.chores.slice());         
+                let responseBody = JSON.parse(response["_body"]);
+                let arr = Object.keys(responseBody).map((k) => responseBody[k]);
+                console.log(arr);
+                // for (var key in responseBody){
+
+                // }
+                // var keys = Object.keys(responseBody);
+                // var values = Object.values(responseBody);
+                // console.log("keys: ", keys);
+                // console.log("values", values);
+                // var chores = a.map((databaseObject) => {
+                //     var m = Object.keys(databaseObject)[0];
+                //     console.log(m);
+                //    // let modifiedChode: Chore = new Chore(databaseObject)
+                // })
+                // this.chores = Object.values(JSON.parse(response["_body"]) || [])
+                //     .map(
+                //         (chore: Chore) => {
+                //             let modifiedChore : Chore = new Chore(chore.id, chore.name, chore.frequency, new Date(chore.lastTime));
+                //             return modifiedChore;
+                //         });                
+                // this.choresChanged.next(this.chores.slice());         
             }
         )
     }
 
     getById(id: number): Chore {
-        let found = this.chores.find((chore) => {
-            return chore.id === id;
-        })
+        let found : Chore;
+        if (this.chores.length > 0) {
+            let found = this.chores.find((chore) => {
+                return chore.id === id;               
+            });            
+        } else {
+            this.http.get(this.url + "chores")
+        }
+       
         return found;
     }
 

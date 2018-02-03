@@ -50,10 +50,12 @@ export class ChoresService {
       
     }
 
-    addChore(newChore: Chore) {
-        this.http.post(this.url + "chores.json", newChore).subscribe(
+    addChore(choreToInsert: Chore) {
+        this.http.post(this.url + "chores.json", choreToInsert).subscribe(
             (response: Response) => {
-                this.chores.push(newChore);
+                let key = JSON.parse(response["_body"]).name;               
+                let insertedChore: Chore = new Chore(key, choreToInsert.name, choreToInsert.frequency, choreToInsert.lastTime);               
+                this.chores.push(insertedChore);
                 this.choresChanged.next(this.chores.slice());
             }
         )

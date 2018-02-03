@@ -32,7 +32,7 @@ export class AddChoreComponent implements OnInit {
     }
 
     onSubmit() {
-        let chore: Chore = new Chore(0,
+        let chore: Chore = new Chore("0",
                                      this.createChoreForm.value["name"],
                                      this.createChoreForm.value["frequency"],
                                      this.createChoreForm.value["lastTime"]);

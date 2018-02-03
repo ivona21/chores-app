@@ -1,12 +1,12 @@
 export class Chore {
-    public id: number;
+    public id: string;
     public name: string;
     public frequency: number;
     public lastTime: Date;
     public nextTime: Date;
 
-    constructor(id: number, name: string, frequency: number, lastTime: Date) {
-        this.id = id ? id : Math.random();
+    constructor(id: string, name: string, frequency: number, lastTime: Date) {
+        this.id = id ? id : Math.random().toString();
         this.name = name;
         this.frequency = frequency;
         this.lastTime = lastTime ? lastTime : new Date();

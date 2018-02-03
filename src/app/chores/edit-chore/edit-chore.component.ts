@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router, ActivatedRoute, Params } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { Subscription } from "rxjs/Subscription";
 import { Chore } from "../chore.model";
 import { ChoresService } from "../chores.service";
 
@@ -9,30 +10,36 @@ import { ChoresService } from "../chores.service";
     templateUrl: "./edit-chore.component.html",
     styleUrls: ["./edit-chore.component.css"]
 })
-export class EditChoreComponent implements OnInit {
-    chore: Chore;
-    id: number;
+export class EditChoreComponent implements OnInit, OnDestroy {
+    chore: Chore = new Chore("", "", 0, new Date());
+    id: string;
     editChoreForm: FormGroup;
+    gotChoreSubscription: Subscription;
 
     constructor(private router: Router,
                 private route: ActivatedRoute,
                 private choresService: ChoresService) { }
 
-    ngOnInit() {        
-        this.route.params
-            .subscribe(
+    ngOnInit() {           
+        this.gotChoreSubscription = this.choresService.gotChore.subscribe(
+            (chore: Chore) => {              
+                this.chore = chore;                            
+            }
+        )      
+        this.route.params.subscribe(
             (params: Params) => {
-                this.id = params["id"] ? Number(params["id"]) : 1;
-                this.chore = this.choresService.getById(this.id);
+                this.id = params["id"] ? params["id"] : "1";              
+                this.choresService.getById(this.id);
             })
-        this.initForm();
+       
+        this.initForm();        
     }
 
     initForm() {
         this.editChoreForm = new FormGroup({
-            "name": new FormControl(this.chore.name, [Validators.required]),
-            "frequency": new FormControl(this.chore.frequency, [Validators.required, Validators.min(1)]),
-            "lastTime": new FormControl(this.chore.lastTime, [Validators.required])
+            "name": new FormControl(null, [Validators.required]),
+            "frequency": new FormControl(null, [Validators.required, Validators.min(1)]),
+            "lastTime": new FormControl(null, [Validators.required])
         });
     }
 
@@ -40,5 +47,9 @@ export class EditChoreComponent implements OnInit {
         this.choresService.updateChore(this.chore); 
         this.editChoreForm.reset();
         this.router.navigate(["chores"]);
+    }
+
+    ngOnDestroy(){
+        this.gotChoreSubscription.unsubscribe();
     }
 }

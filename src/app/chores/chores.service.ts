@@ -1,60 +1,56 @@
 import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
 import { Subject } from "rxjs/Subject";
+import { Observable } from "rxjs/Observable";
 import { Chore } from "./chore.model";
 
 
 @Injectable()
 export class ChoresService {
     choresChanged = new Subject<Chore[]>();
+    gotChore = new Subject<Chore>();
     url: string = "https://love-your-home.firebaseio.com/";
     chores: Chore[] = [];
 
     constructor(private http: Http) { }
 
-    getChores() {        
+    getChores() : void {
         this.http.get(this.url + "chores.json").subscribe(
             (response: Response) => {
                 let responseBody = JSON.parse(response["_body"]);
-                let arr = Object.keys(responseBody).map((k) => responseBody[k]);
-                console.log(arr);
-                // for (var key in responseBody){
+                this.chores = Object.keys(responseBody).map((key) => {
+                    let chore = new Chore(
+                        key,
+                        responseBody[key].name,
+                        responseBody[key].frequency,
+                        new Date(responseBody[key].lastTime))
 
-                // }
-                // var keys = Object.keys(responseBody);
-                // var values = Object.values(responseBody);
-                // console.log("keys: ", keys);
-                // console.log("values", values);
-                // var chores = a.map((databaseObject) => {
-                //     var m = Object.keys(databaseObject)[0];
-                //     console.log(m);
-                //    // let modifiedChode: Chore = new Chore(databaseObject)
-                // })
-                // this.chores = Object.values(JSON.parse(response["_body"]) || [])
-                //     .map(
-                //         (chore: Chore) => {
-                //             let modifiedChore : Chore = new Chore(chore.id, chore.name, chore.frequency, new Date(chore.lastTime));
-                //             return modifiedChore;
-                //         });                
-                // this.choresChanged.next(this.chores.slice());         
+                    return chore;
+                });
+                this.choresChanged.next(this.chores.slice());
             }
         )
     }
 
-    getById(id: number): Chore {
+    getById(id: string): void {
         let found : Chore;
         if (this.chores.length > 0) {
-            let found = this.chores.find((chore) => {
-                return chore.id === id;               
-            });            
+            found = this.chores.find((chore) => {
+                return chore.id === id;          
+            });              
+            this.gotChore.next(found);       
         } else {
-            this.http.get(this.url + "chores")
-        }
-       
-        return found;
+        this.http.get(this.url + "chores" + "/" + id + ".json").subscribe(
+            (response: Response) => {
+                let responseBody = JSON.parse(response["_body"]);
+                let chore = new Chore(responseBody.id, responseBody.name, responseBody.frequency, new Date(responseBody.lastTime));
+                this.gotChore.next(chore);
+            }
+        )}       
+      
     }
 
-    addChore(newChore: Chore) {      
+    addChore(newChore: Chore) {
         this.http.post(this.url + "chores.json", newChore).subscribe(
             (response: Response) => {
                 this.chores.push(newChore);
@@ -65,7 +61,7 @@ export class ChoresService {
 
     updateChore(chore: Chore) {
         let foundIndex = this.chores.findIndex(x => x.id === chore.id);
-        let brandNew: Chore = new Chore(chore.id, chore.name, chore.frequency, chore.lastTime);     
+        let brandNew: Chore = new Chore(chore.id, chore.name, chore.frequency, chore.lastTime);
         this.chores[foundIndex] = brandNew;
         this.choresChanged.next(this.chores.slice());
     }

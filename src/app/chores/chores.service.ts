@@ -43,7 +43,7 @@ export class ChoresService {
         this.http.get(this.url + "chores" + "/" + id + ".json").subscribe(
             (response: Response) => {
                 let responseBody = JSON.parse(response["_body"]);
-                let chore = new Chore(responseBody.id, responseBody.name, responseBody.frequency, new Date(responseBody.lastTime));
+                let chore = responseBody ? new Chore(responseBody.id, responseBody.name, responseBody.frequency, new Date(responseBody.lastTime)) : new Chore("", "", 0, new Date());
                 this.gotChore.next(chore);
             }
         )}       
@@ -73,5 +73,16 @@ export class ChoresService {
                this.choresChanged.next(this.chores.slice());
             }
         )       
+    }
+
+    deleteChore(choreToDelete: Chore){
+        let index = this.chores.findIndex(chore => chore.id === choreToDelete.id);
+        this.http.delete(this.url + "chores/" + choreToDelete.id + ".json").subscribe(
+            (response: Response) => {
+                console.log("delete: ", response);
+                this.chores.splice(index, 1);
+                this.choresChanged.next(this.chores.slice());
+            }
+        )
     }
 }

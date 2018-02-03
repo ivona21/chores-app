@@ -16,7 +16,7 @@ import { ChoresService } from "../chores.service";
 export class ChoreListComponent implements OnInit, OnDestroy {
     chores: Chore[];
     dataSource: MatTableDataSource<Chore>;
-    displayedColumns = ["name", "frequency", "last-time", "next-time"];
+    displayedColumns = ["name", "frequency", "last-time", "next-time", "actions"];
     subscription: Subscription;
     selectedRowIndex: number = -1;
 
@@ -36,6 +36,15 @@ export class ChoreListComponent implements OnInit, OnDestroy {
 
     onAddNewChore() {
         this.router.navigate(["new"], { relativeTo: this.route })
+    }
+
+    onDeleteChore(chore: Chore, $event) {
+        if ($event.stopPropagation) $event.stopPropagation();
+        if ($event.preventDefault) $event.preventDefault();
+        $event.cancelBubble = true;
+        
+        this.choresService.deleteChore(chore);
+        this.router.navigate(["/chores"]);
     }
 
     onRowClick(row) {

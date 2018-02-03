@@ -12,7 +12,7 @@ import { MatNativeDateModule } from "@angular/material";
     imports: [
         MatButtonModule,
         MatToolbarModule,
-        MatTableModule,
+        MatTableModule,       
         FlexLayoutModule,
         MatFormFieldModule,
         MatInputModule,

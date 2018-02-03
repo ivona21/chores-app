@@ -5,12 +5,18 @@
         </section>
     </div>
     <div class="mat-elevation-z5 form-container">
+        <div fxLayout="row">
+            <div fxFlexOffset="92">
+                <mat-icon class="margin-top-10 clickable" (click)="onCancel()">highlight_off</mat-icon>
+            </div>
+        </div>
         <form [formGroup]="editChoreForm" (ngSubmit)="onSubmit()">
             <mat-form-field>
                 <input matInput type="text" formControlName="name" id="name" name="name" placeholder="Name" [(ngModel)]="chore.name">
             </mat-form-field>
             <mat-form-field>
-                <input matInput type="number" formControlName="frequency" id="frequency" name="frequency" placeholder="Frequency in days" [(ngModel)]="chore.frequency">
+                <input matInput type="number" formControlName="frequency" id="frequency" name="frequency" placeholder="Frequency in days"
+                    [(ngModel)]="chore.frequency">
             </mat-form-field>
             <mat-form-field>
                 <input matInput [matDatepicker]="lastTime" placeholder="Last time done" formControlName="lastTime" [(ngModel)]="chore.lastTime">

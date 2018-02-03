@@ -5,6 +5,11 @@
         </section>
     </div>
     <div class="mat-elevation-z5 form-container">
+        <div fxLayout="row">
+            <div fxFlexOffset="92">               
+                <mat-icon class="margin-top-10 clickable" (click)="onCancel()">highlight_off</mat-icon>
+            </div>
+        </div>
         <form [formGroup]="createChoreForm" (ngSubmit)="onSubmit()">
             <mat-form-field>
                 <input matInput type="text" formControlName="name" id="name" name="name" placeholder="Name">
@@ -17,7 +22,7 @@
                 <mat-datepicker-toggle matSuffix [for]="lastTime"></mat-datepicker-toggle>
                 <mat-datepicker #lastTime></mat-datepicker>
             </mat-form-field>
-            <button mat-raised-button color="accent" type="submit" [disabled]="!createChoreForm.valid" >Submit</button>
+            <button mat-raised-button color="accent" type="submit" [disabled]="!createChoreForm.valid">Submit</button>
         </form>
     </div>
 </div>

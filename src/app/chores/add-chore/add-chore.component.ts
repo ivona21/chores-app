@@ -12,8 +12,8 @@ import { Chore } from "../chore.model";
 export class AddChoreComponent implements OnInit {
     createChoreForm: FormGroup;
     constructor(private router: Router,
-                private route: ActivatedRoute,
-                private choresService: ChoresService) { }
+        private route: ActivatedRoute,
+        private choresService: ChoresService) { }
 
     ngOnInit() {
         this.initForm();
@@ -27,17 +27,21 @@ export class AddChoreComponent implements OnInit {
         });
     }
 
-    private clearForm(){
+    private clearForm() {
         this.createChoreForm.reset();
     }
 
     onSubmit() {
         let chore: Chore = new Chore("",
-                                     this.createChoreForm.value["name"],
-                                     this.createChoreForm.value["frequency"],
-                                     this.createChoreForm.value["lastTime"]);
+            this.createChoreForm.value["name"],
+            this.createChoreForm.value["frequency"],
+            this.createChoreForm.value["lastTime"]);
         this.choresService.addChore(chore);
         this.clearForm();
         this.router.navigate(["chores"])
+    }
+
+    onCancel() {
+        this.router.navigate(["/chores"]);
     }
 }

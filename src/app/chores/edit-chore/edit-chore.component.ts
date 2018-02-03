@@ -49,6 +49,10 @@ export class EditChoreComponent implements OnInit, OnDestroy {
         this.router.navigate(["chores"]);
     }
 
+    onCancel(){
+        this.router.navigate(["/chores"]);
+    }
+
     ngOnDestroy(){
         this.gotChoreSubscription.unsubscribe();
     }

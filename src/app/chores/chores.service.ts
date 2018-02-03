@@ -61,10 +61,17 @@ export class ChoresService {
         )
     }
 
-    updateChore(chore: Chore) {
-        let foundIndex = this.chores.findIndex(x => x.id === chore.id);
-        let brandNew: Chore = new Chore(chore.id, chore.name, chore.frequency, chore.lastTime);
-        this.chores[foundIndex] = brandNew;
-        this.choresChanged.next(this.chores.slice());
+    updateChore(choreToUpdate: Chore) {      
+        let index = this.chores.findIndex(chore => chore.id === choreToUpdate.id);       
+        this.http.put(this.url + "chores/" + choreToUpdate.id + ".json", choreToUpdate).subscribe(
+            (response: Response) => {
+                let responseBody = JSON.parse(response["_body"]);
+                let updatedChore : Chore = new Chore(
+                    responseBody.id, responseBody.name, responseBody.frequency, new Date(responseBody.lastTime)
+                );
+               this.chores[index] = updatedChore;
+               this.choresChanged.next(this.chores.slice());
+            }
+        )       
     }
 }

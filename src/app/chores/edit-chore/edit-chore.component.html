@@ -16,10 +16,15 @@
             </mat-form-field>
             <mat-form-field>
                 <input matInput type="number" formControlName="frequency" id="frequency" name="frequency" placeholder="Frequency in days"
-                    [(ngModel)]="chore.frequency">
+                    [(ngModel)]="chore.frequency" (ngModelChange)="calculateNextTime()">
             </mat-form-field>
             <mat-form-field>
-                <input matInput [matDatepicker]="lastTime" placeholder="Last time done" formControlName="lastTime" [(ngModel)]="chore.lastTime">
+                <input matInput 
+                       [matDatepicker]="lastTime" 
+                       placeholder="Last time done" 
+                       formControlName="lastTime" 
+                       [(ngModel)]="chore.lastTime"
+                       (ngModelChange)="calculateNextTime()">
                 <mat-datepicker-toggle matSuffix [for]="lastTime"></mat-datepicker-toggle>
                 <mat-datepicker #lastTime></mat-datepicker>
             </mat-form-field>         

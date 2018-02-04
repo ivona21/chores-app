@@ -52,6 +52,11 @@ export class EditChoreComponent implements OnInit, OnDestroy {
         this.router.navigate(["/chores"]);
     }
 
+    calculateNextTime(){
+        let nextTime = new Date().setDate(this.chore.lastTime.getDate() + this.chore.frequency);       
+        this.chore.nextTime = new Date(nextTime);       
+    }   
+
     ngOnDestroy(){
         this.gotChoreSubscription.unsubscribe();
     }

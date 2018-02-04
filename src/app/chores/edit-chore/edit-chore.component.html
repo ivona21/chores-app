@@ -22,7 +22,7 @@
                 <input matInput [matDatepicker]="lastTime" placeholder="Last time done" formControlName="lastTime" [(ngModel)]="chore.lastTime">
                 <mat-datepicker-toggle matSuffix [for]="lastTime"></mat-datepicker-toggle>
                 <mat-datepicker #lastTime></mat-datepicker>
-            </mat-form-field>
+            </mat-form-field>         
             <button mat-raised-button color="accent" type="submit" [disabled]="!editChoreForm.valid">Submit</button>
         </form>
     </div>

@@ -45,6 +45,11 @@ export class ChoreListComponent implements OnInit, OnDestroy {
         
         this.choresService.deleteChore(chore);
         this.router.navigate(["/chores"]);
+    }   
+
+    calculateNextTime(chore: Chore){
+        let nextTime = new Date().setDate(chore.lastTime.getDate() + chore.frequency);
+        return nextTime;
     }
 
     onRowClick(row) {

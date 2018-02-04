@@ -39,13 +39,12 @@ export class EditChoreComponent implements OnInit, OnDestroy {
         this.editChoreForm = new FormGroup({
             "name": new FormControl(null, [Validators.required]),
             "frequency": new FormControl(null, [Validators.required, Validators.min(1)]),
-            "lastTime": new FormControl(null, [Validators.required])
-        });
+            "lastTime": new FormControl(null, [Validators.required]),
+          });
     }
 
-    onSubmit(){
-        this.choresService.updateChore(this.chore); 
-        this.editChoreForm.reset();
+    onSubmit(){           
+        this.choresService.updateChore(this.chore);   
         this.router.navigate(["chores"]);
     }
 

@@ -17,22 +17,22 @@ export class EditChoreComponent implements OnInit, OnDestroy {
     gotChoreSubscription: Subscription;
 
     constructor(private router: Router,
-                private route: ActivatedRoute,
-                private choresService: ChoresService) { }
+        private route: ActivatedRoute,
+        private choresService: ChoresService) { }
 
-    ngOnInit() {           
+    ngOnInit() {
         this.gotChoreSubscription = this.choresService.gotChore.subscribe(
-            (chore: Chore) => {              
-                this.chore = chore;                            
+            (chore: Chore) => {
+                this.chore = chore;
             }
-        )      
+        )
         this.route.params.subscribe(
             (params: Params) => {
-                this.id = params["id"] ? params["id"] : "1";              
+                this.id = params["id"] ? params["id"] : "1";
                 this.choresService.getById(this.id);
             })
-       
-        this.initForm();        
+
+        this.initForm();
     }
 
     initForm() {
@@ -40,24 +40,24 @@ export class EditChoreComponent implements OnInit, OnDestroy {
             "name": new FormControl(null, [Validators.required]),
             "frequency": new FormControl(null, [Validators.required, Validators.min(1)]),
             "lastTime": new FormControl(null, [Validators.required]),
-          });
+        });
     }
 
-    onSubmit(){           
-        this.choresService.updateChore(this.chore);   
+    onSubmit() {
+        this.choresService.updateChore(this.chore);
         this.router.navigate(["chores"]);
     }
 
-    onCancel(){
+    onCancel() {
         this.router.navigate(["/chores"]);
     }
 
-    calculateNextTime(){
-        let nextTime = new Date().setDate(this.chore.lastTime.getDate() + this.chore.frequency);       
-        this.chore.nextTime = new Date(nextTime);       
-    }   
+    calculateNextTime() {
+        let nextTime = new Date().setDate(this.chore.lastTime.getDate() + this.chore.frequency);
+        this.chore.nextTime = new Date(nextTime);
+    }
 
-    ngOnDestroy(){
+    ngOnDestroy() {
         this.gotChoreSubscription.unsubscribe();
     }
 }

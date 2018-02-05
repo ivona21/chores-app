@@ -24,7 +24,7 @@ export class ChoreListComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private choresService: ChoresService) { }
 
-    ngOnInit() {
+    ngOnInit() {     
         this.subscription = this.choresService.choresChanged.subscribe(
             (chores: Chore[]) => {
                 console.log("get chores: ", chores);
@@ -33,6 +33,15 @@ export class ChoreListComponent implements OnInit, OnDestroy {
             })
 
         this.choresService.getChores();
+        this.findSelectedRow();
+    }
+
+    private findSelectedRow() {
+        let selectedChoreId = this.route.snapshot["_urlSegment"].segments &&
+            this.route.snapshot["_urlSegment"].segments[1] ? this.route.snapshot["_urlSegment"].segments[1].path : "";
+        if (selectedChoreId) {
+            this.selectedRowIndex = selectedChoreId;
+        }
     }
 
     onAddNewChore() {

@@ -29,7 +29,7 @@ export class ChoreListComponent implements OnInit, OnDestroy {
             (chores: Chore[]) => {             
                 this.chores = chores;
                 this.dataSource = new MatTableDataSource(this.chores);
-            })
+            });        
 
         this.choresService.getChores(false);
         this.findSelectedRow();
@@ -45,15 +45,21 @@ export class ChoreListComponent implements OnInit, OnDestroy {
 
     onAddNewChore() {
         this.router.navigate(["new"], { relativeTo: this.route })
+        this.selectedRowIndex = -1;
+    }
+
+    private deleteChore(chore){
+        this.choresService.deleteChore(chore);
+        this.router.navigate(["/chores"]);
+        this.selectedRowIndex = -1;
     }
 
     onDeleteChore(chore: Chore, $event) {
         if ($event.stopPropagation) $event.stopPropagation();
         if ($event.preventDefault) $event.preventDefault();
         $event.cancelBubble = true;
-
-        this.choresService.deleteChore(chore);
-        this.router.navigate(["/chores"]);
+        let deleteConfirm = confirm("Are you sure you want to delete this");
+        deleteConfirm ? this.deleteChore(chore) : "";       
     }
 
     onRowClick(row) {

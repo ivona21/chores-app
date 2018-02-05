@@ -12,17 +12,34 @@
         </div>
         <form [formGroup]="createChoreForm" (ngSubmit)="onSubmit()">
             <mat-form-field>
-                <input matInput type="text" formControlName="name" id="name" name="name" placeholder="Name">
+                <input matInput 
+                       type="text" 
+                       formControlName="name" 
+                       id="name" 
+                       name="name" 
+                       placeholder="Name">
             </mat-form-field>
             <mat-form-field>
-                <input matInput type="number" formControlName="frequency" id="frequency" name="frequency" placeholder="Frequency in days">
+                <input matInput 
+                       type="number" 
+                       formControlName="frequency" 
+                       id="frequency" 
+                       name="frequency" 
+                       placeholder="Frequency in days">
             </mat-form-field>
             <mat-form-field>
-                <input matInput [matDatepicker]="lastTime" placeholder="Last time done" formControlName="lastTime">
-                <mat-datepicker-toggle matSuffix [for]="lastTime"></mat-datepicker-toggle>
+                <input matInput                       
+                       formControlName="lastTime"
+                       [matDatepicker]="lastTime" 
+                       placeholder="Last time done" 
+                       >
+                <mat-datepicker-toggle matSuffix 
+                                       [for]="lastTime"></mat-datepicker-toggle>
                 <mat-datepicker #lastTime></mat-datepicker>
             </mat-form-field>
-            <button mat-raised-button color="accent" type="submit" [disabled]="!createChoreForm.valid">Submit</button>
+            <button mat-raised-button color="accent" 
+                    type="submit" 
+                    [disabled]="!createChoreForm.valid">Submit</button>
         </form>
     </div>
 </div>

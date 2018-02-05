@@ -17,21 +17,26 @@ export class ChoresService {
     constructor(private http: Http) { }
 
     getChores(): void {
-        this.http.get(this.url + "chores.json").subscribe(
-            (response: Response) => {
-                let responseBody = JSON.parse(response["_body"]);
-                this.chores = Object.keys(responseBody).map((key) => {
-                    let chore = new Chore(
-                        key,
-                        responseBody[key].name,
-                        responseBody[key].frequency,
-                        new Date(responseBody[key].lastTime))
+        console.log("service chores when get chores", this.chores);
+        if (this.chores.length > 0) {          
+            this.choresChanged.next(this.chores.slice());
+            return;
+        } else {
+            this.http.get(this.url + "chores.json").subscribe(
+                (response: Response) => {
+                    let responseBody = JSON.parse(response["_body"]);
+                    this.chores = Object.keys(responseBody).map((key) => {
+                        let chore = new Chore(
+                            key,
+                            responseBody[key].name,
+                            responseBody[key].frequency,
+                            new Date(responseBody[key].lastTime))
 
-                    return chore;
+                        return chore;
+                    });
+                    this.choresChanged.next(this.chores.slice());
                 });
-                this.choresChanged.next(this.chores.slice());
-            }
-        )
+        }
     }
 
     private getChoreFromChores(id: string) {
@@ -52,19 +57,8 @@ export class ChoresService {
             this.choresChangesSubscription = this.choresChanged.subscribe(
                 (chores: Chore[]) => {
                     this.getChoreFromChores(id);
-                }
-            )
+                })
         }
-        //get chore from server
-        // else {
-        // this.http.get(this.url + "chores" + "/" + id + ".json").subscribe(
-        //     (response: Response) => {
-        //         let responseBody = JSON.parse(response["_body"]);
-        //         let chore = responseBody ? new Chore(responseBody.id, responseBody.name, responseBody.frequency, new Date(responseBody.lastTime)) : new Chore("", "", 0, new Date());
-        //         this.gotChore.next(chore);
-        //     }
-        // )}       
-
     }
 
     addChore(choreToInsert: Chore) {

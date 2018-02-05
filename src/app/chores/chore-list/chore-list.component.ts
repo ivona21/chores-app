@@ -25,13 +25,14 @@ export class ChoreListComponent implements OnInit, OnDestroy {
         private choresService: ChoresService) { }
 
     ngOnInit() {
-        this.choresService.getChores();
-
         this.subscription = this.choresService.choresChanged.subscribe(
             (chores: Chore[]) => {
+                console.log("get chores: ", chores);
                 this.chores = chores;
                 this.dataSource = new MatTableDataSource(this.chores);
             })
+
+        this.choresService.getChores();
     }
 
     onAddNewChore() {
@@ -42,10 +43,10 @@ export class ChoreListComponent implements OnInit, OnDestroy {
         if ($event.stopPropagation) $event.stopPropagation();
         if ($event.preventDefault) $event.preventDefault();
         $event.cancelBubble = true;
-        
+
         this.choresService.deleteChore(chore);
         this.router.navigate(["/chores"]);
-    }   
+    }
 
     onRowClick(row) {
         this.selectedRowIndex = row.id;

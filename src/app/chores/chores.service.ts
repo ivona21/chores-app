@@ -16,9 +16,8 @@ export class ChoresService {
 
     constructor(private http: Http) { }
 
-    getChores(): void {
-        console.log("service chores when get chores", this.chores);
-        if (this.chores.length > 0) {          
+    getChores(fromServer: boolean): void {      
+        if (this.chores.length > 0 && !fromServer) {          
             this.choresChanged.next(this.chores.slice());
             return;
         } else {
@@ -91,8 +90,7 @@ export class ChoresService {
     deleteChore(choreToDelete: Chore) {
         let index = this.chores.findIndex(chore => chore.id === choreToDelete.id);
         this.http.delete(this.url + "chores/" + choreToDelete.id + ".json").subscribe(
-            (response: Response) => {
-                console.log("delete: ", response);
+            (response: Response) => {          
                 this.chores.splice(index, 1);
                 this.choresChanged.next(this.chores.slice());
             }

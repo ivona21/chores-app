@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { Router, ActivatedRoute, Params } from "@angular/router";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormGroup, FormControl, Validators, NgForm } from "@angular/forms";
 import { Subscription } from "rxjs/Subscription";
 import { Chore } from "../chore.model";
 import { ChoresService } from "../chores.service";
@@ -15,6 +15,8 @@ export class EditChoreComponent implements OnInit, OnDestroy {
     id: string;
     editChoreForm: FormGroup;
     gotChoreSubscription: Subscription;
+    //just to check if form is submitted
+    @ViewChild("ngForm") editChoreNgForm: NgForm;
 
     constructor(private router: Router,
         private route: ActivatedRoute,
@@ -28,6 +30,7 @@ export class EditChoreComponent implements OnInit, OnDestroy {
         )
         this.route.params.subscribe(
             (params: Params) => {
+                this.saveChangesWarning();
                 this.id = params["id"] ? params["id"] : "1";
                 this.choresService.getById(this.id);
             })
@@ -43,7 +46,7 @@ export class EditChoreComponent implements OnInit, OnDestroy {
         });
     }
 
-    onSubmit() {
+    onSubmit() {       
         this.choresService.updateChore(this.chore);
         this.router.navigate(["chores"]);
     }
@@ -53,11 +56,22 @@ export class EditChoreComponent implements OnInit, OnDestroy {
     }
 
     calculateNextTime() {
-        let nextTime = new Date().setDate(this.chore.lastTime.getDate() + this.chore.frequency);
-        this.chore.nextTime = new Date(nextTime);
+        if (this.chore.lastTime){
+            let nextTime = new Date().setDate(this.chore.lastTime.getDate() + this.chore.frequency);
+            this.chore.nextTime = new Date(nextTime);
+        }      
+    }
+
+    saveChangesWarning() {      
+        if (this.editChoreForm && this.editChoreForm.dirty && !this.editChoreNgForm.submitted) {
+            let saveChanges = confirm("Would you like to save your changes first?");           
+            saveChanges ? this.router.navigate(["/chores", this.chore.id, "edit"]) : this.choresService.getChores(true);
+            this.editChoreForm.reset();         
+        }
     }
 
     ngOnDestroy() {
+        this.saveChangesWarning();
         this.gotChoreSubscription.unsubscribe();
     }
 }

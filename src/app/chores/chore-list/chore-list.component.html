@@ -4,7 +4,7 @@
             <h1>Chores: </h1>
         </section>
     </div>
-    <mat-table #table [dataSource]="dataSource" class="mat-elevation-z5">
+    <mat-table #table [dataSource]="choresTable" class="mat-elevation-z5">
         <!-- Name Column -->
         <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>

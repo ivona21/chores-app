@@ -10,12 +10,12 @@ export class Chore {
         this.name = name;
         this.frequency = frequency;
         this.lastTime = lastTime ? lastTime : new Date();
-        this.nextTime = this.calculateNextTime();
+        this.calculateNextTime();
     }
 
-    private calculateNextTime(): Date {
-        let nextTime = new Date();
-        nextTime.setDate(this.lastTime.getDate() + this.frequency);
-        return nextTime;
+    calculateNextTime(): void {
+        let lastTimeMs = this.lastTime.getTime();
+        let msToAdd = 1000 * 60 * 60 * 24 * this.frequency;
+        this.nextTime = new Date(lastTimeMs + msToAdd);
     }
 }

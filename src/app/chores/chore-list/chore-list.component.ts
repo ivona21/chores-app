@@ -24,12 +24,16 @@ export class ChoreListComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private choresService: ChoresService) { }
 
-    ngOnInit() {     
+    ngOnInit() {
+        this.route.url.subscribe(
+            (url) => { this.selectedRowIndex = -1; }
+        )
+
         this.subscription = this.choresService.choresChanged.subscribe(
-            (chores: Chore[]) => {             
+            (chores: Chore[]) => {
                 this.chores = chores;
                 this.dataSource = new MatTableDataSource(this.chores);
-            });        
+            });
 
         this.choresService.getChores(false);
         this.findSelectedRow();
@@ -48,7 +52,7 @@ export class ChoreListComponent implements OnInit, OnDestroy {
         this.selectedRowIndex = -1;
     }
 
-    private deleteChore(chore){
+    private deleteChore(chore) {
         this.choresService.deleteChore(chore);
         this.router.navigate(["/chores"]);
         this.selectedRowIndex = -1;
@@ -59,10 +63,10 @@ export class ChoreListComponent implements OnInit, OnDestroy {
         if ($event.preventDefault) $event.preventDefault();
         $event.cancelBubble = true;
         let deleteConfirm = confirm("Are you sure you want to delete this");
-        deleteConfirm ? this.deleteChore(chore) : "";       
+        deleteConfirm ? this.deleteChore(chore) : "";
     }
 
-    onRowClick(row) {
+    onRowClick(row) {      
         this.selectedRowIndex = row.id;
         this.router.navigate([row.id, "edit"], { relativeTo: this.route });
     }

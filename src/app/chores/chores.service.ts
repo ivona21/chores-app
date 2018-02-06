@@ -46,7 +46,7 @@ export class ChoresService {
     }
 
     getById(id: string): void {
-        //always get chore from all chores and not from the server to simplify two way binding
+        //always get chore from all chores and not from the server to simplify two way binding      
         if (this.chores.length > 0) {
             if (this.choresChangesSubscription) {
                 this.choresChangesSubscription.unsubscribe();

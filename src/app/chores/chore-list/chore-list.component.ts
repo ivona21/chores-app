@@ -65,8 +65,8 @@ export class ChoreListComponent implements OnInit, OnDestroy {
         if ($event.stopPropagation) $event.stopPropagation();
         if ($event.preventDefault) $event.preventDefault();
         $event.cancelBubble = true;
-
-        let answer;
+        this.selectedRowIndex = -1;
+     
         let deleteConfirmDialogRef = this.deleteConfirmDialog.open(ConfirmDialogComponent, {
             width: "300px",
             data: new ConfirmDialogData("Are you sure you want to delete this chore?", "", "Yes, delete it", "No, go back", chore)

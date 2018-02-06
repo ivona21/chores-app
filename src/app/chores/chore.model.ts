@@ -13,7 +13,7 @@ export class Chore {
         this.calculateNextTime();
     }
 
-    calculateNextTime(): void {
+    calculateNextTime(): void {     
         let lastTimeMs = this.lastTime.getTime();
         let msToAdd = 1000 * 60 * 60 * 24 * this.frequency;
         this.nextTime = new Date(lastTimeMs + msToAdd);

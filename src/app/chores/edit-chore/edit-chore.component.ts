@@ -4,6 +4,9 @@ import { FormGroup, FormControl, Validators, NgForm } from "@angular/forms";
 import { Subscription } from "rxjs/Subscription";
 import { Chore } from "../chore.model";
 import { ChoresService } from "../chores.service";
+import { MatDialog } from "@angular/material";
+import { ConfirmDialogComponent } from "../../shared/dialogs/confirmDialog/confirm-dialog.component";
+import { ConfirmDialogData } from "../../shared/dialogs/confirmDialog/confirm-dialog-data.model";
 
 @Component({
     selector: "app-edit-chore",
@@ -20,17 +23,23 @@ export class EditChoreComponent implements OnInit, OnDestroy {
 
     constructor(private router: Router,
         private route: ActivatedRoute,
-        private choresService: ChoresService) { }
+        private choresService: ChoresService,
+        private warningDialog: MatDialog) { }
 
-    ngOnInit() {
+    ngOnInit() {      
         this.gotChoreSubscription = this.choresService.gotChore.subscribe(
             (chore: Chore) => {
+                console.log("got chore ", new Date());
                 chore ? this.chore = chore : this.router.navigate(["/chores"]);
             }
         )
         this.route.params.subscribe(
             (params: Params) => {
-                this.saveChangesWarning();
+                if (this.editChoreForm && this.editChoreForm.dirty && !this.editChoreNgForm.submitted) {
+                    let choreToCheck : Chore = Object.assign({}, this.chore);
+                    console.log("params check", choreToCheck);
+                    this.saveChangesWarning(choreToCheck);
+                }
                 if (params["id"]) {
                     this.choresService.getById(params["id"]);
                 }
@@ -47,8 +56,9 @@ export class EditChoreComponent implements OnInit, OnDestroy {
         });
     }
 
-    onSubmit() {     
-        this.choresService.updateChore(this.chore);
+    onSubmit(choreToSave: Chore) {
+        console.log("chore to save on submit: ", choreToSave);
+        this.choresService.updateChore(choreToSave);
         this.redirectAfterSubmit ? this.router.navigate(["/chores"]) : this.redirectAfterSubmit = true;
     }
 
@@ -56,30 +66,41 @@ export class EditChoreComponent implements OnInit, OnDestroy {
         this.router.navigate(["/chores"]);
     }
 
-    calculateNextTime() {      
-        this.chore.calculateNextTime();
-    }
+    calculateNextTime() {
+        if (this.chore.lastTime && this.chore.frequency){
+            this.chore.calculateNextTime();
+        }     
+    }    
 
-    saveChangesWarning() {
-        if (this.editChoreForm && this.editChoreForm.dirty && !this.editChoreNgForm.submitted) {
-            if (this.editChoreForm.valid) {
-                let saveChanges = confirm("Would you like to save your changes first?");
-                if (saveChanges) {                  
-                    this.redirectAfterSubmit = false;
-                    this.editChoreNgForm.ngSubmit.emit(this.chore);
-                } else {
-                    this.choresService.getChores(true);
-                }
-                this.editChoreForm.reset();
-            } else {
-                this.choresService.getChores(true);
-                this.editChoreForm.reset();
-            }
+    saveChangesWarning(choreToSave: Chore) {
+        if (!this.editChoreForm.valid) {
+            this.choresService.getChores(true);
+            this.editChoreForm.reset();
+            return;
         }
+       
+        let warningDialogRef = this.warningDialog.open(ConfirmDialogComponent, {
+            width: "300px",
+            data: new ConfirmDialogData("Would you like to save your changes first?", "", "Yes, save it", "No, just leave", {})
+        })
+        warningDialogRef.afterClosed().subscribe(
+            (saveChanges) => {
+                if (saveChanges) {                   
+                    this.redirectAfterSubmit = false;
+                    this.editChoreNgForm.ngSubmit.emit(choreToSave);                  
+                } else {
+                    this.choresService.getChores(true);                 
+                }  
+                this.editChoreForm.markAsPristine();              
+            });
     }
 
     ngOnDestroy() {
-        this.saveChangesWarning();
+        console.log("on destroj", new Date());
+        if (this.editChoreForm && this.editChoreForm.dirty && !this.editChoreNgForm.submitted) {
+            let choreToSave : Chore = Object.assign({}, this.chore);
+            this.saveChangesWarning(choreToSave);
+        }
         this.gotChoreSubscription.unsubscribe();
     }
 }

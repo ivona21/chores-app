@@ -14,9 +14,13 @@ import { AppRouterModule } from "./app-routing.module";
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { HttpModule } from '@angular/http';
+import { ConfirmDialogComponent } from './shared/dialogs/confirmDialog/confirm-dialog.component';
 
 
 @NgModule({
+  entryComponents: [
+    ConfirmDialogComponent
+  ],
   declarations: [
     AppComponent,
     HeaderComponent,
@@ -24,7 +28,8 @@ import { HttpModule } from '@angular/http';
     ChoresComponent,
     ChoreListComponent,
     AddChoreComponent,
-    EditChoreComponent
+    EditChoreComponent,  
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,

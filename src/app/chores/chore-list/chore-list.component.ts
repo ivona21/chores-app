@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
-import { MatTableDataSource } from "@angular/material";
+import { MatTableDataSource, MatDialog } from "@angular/material";
 
 import { Subscription } from "rxjs/Subscription";
 
 import { Chore } from "../chore.model";
 import { ChoresService } from "../chores.service";
+import { ConfirmDialogComponent } from "../../shared/dialogs/confirmDialog/confirm-dialog.component";
+import { ConfirmDialogData } from "../../shared/dialogs/confirmDialog/confirm-dialog-data.model";
 
 
 @Component({
@@ -22,7 +24,8 @@ export class ChoreListComponent implements OnInit, OnDestroy {
 
     constructor(private router: Router,
         private route: ActivatedRoute,
-        private choresService: ChoresService) { }
+        private choresService: ChoresService,
+        private deleteConfirmDialog: MatDialog) { }
 
     ngOnInit() {
         this.route.url.subscribe(
@@ -62,11 +65,21 @@ export class ChoreListComponent implements OnInit, OnDestroy {
         if ($event.stopPropagation) $event.stopPropagation();
         if ($event.preventDefault) $event.preventDefault();
         $event.cancelBubble = true;
-        let deleteConfirm = confirm("Are you sure you want to delete this");
-        deleteConfirm ? this.deleteChore(chore) : "";
+
+        let answer;
+        let deleteConfirmDialogRef = this.deleteConfirmDialog.open(ConfirmDialogComponent, {
+            width: "300px",
+            data: new ConfirmDialogData("Are you sure you want to delete this chore?", "", "Yes, delete it", "No, go back", chore)
+        });
+        deleteConfirmDialogRef.afterClosed().subscribe(
+            (result) => {
+                if (result) {
+                    this.deleteChore(chore);
+                }
+            });
     }
 
-    onRowClick(row) {      
+    onRowClick(row) {
         this.selectedRowIndex = row.id;
         this.router.navigate([row.id, "edit"], { relativeTo: this.route });
     }

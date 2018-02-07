@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { Router, ActivatedRoute, Params } from "@angular/router";
 import { FormGroup, FormControl, Validators, NgForm } from "@angular/forms";
-import { Subscription } from "rxjs/Subscription";
-import { Chore } from "../chore.model";
-import { ChoresService } from "../chores.service";
 import { MatDialog } from "@angular/material";
+import { Subscription } from "rxjs/Subscription";
+import { ChoresService } from "../chores.service";
 import { ConfirmDialogComponent } from "../../shared/dialogs/confirmDialog/confirm-dialog.component";
 import { ConfirmDialogData } from "../../shared/dialogs/confirmDialog/confirm-dialog-data.model";
+import { Chore } from "../chore.model";
 
 @Component({
     selector: "app-edit-chore",
@@ -17,29 +17,32 @@ export class EditChoreComponent implements OnInit, OnDestroy {
     chore: Chore = new Chore("", "", 0, new Date());
     editChoreForm: FormGroup;
     gotChoreSubscription: Subscription;
-    redirectAfterSubmit: boolean = true;
-    //just to check if form is submitted
-    @ViewChild("ngForm") editChoreNgForm: NgForm;
+    submitted: boolean = false;
 
     constructor(private router: Router,
-        private route: ActivatedRoute,
-        private choresService: ChoresService,
-        private warningDialog: MatDialog) { }
+        private route: ActivatedRoute,      
+        private warningDialog: MatDialog,
+        private choresService: ChoresService) { }
 
-    ngOnInit() {      
+    ngOnInit() {
         this.gotChoreSubscription = this.choresService.gotChore.subscribe(
             (chore: Chore) => {
-                console.log("got chore ", new Date());
-                chore ? this.chore = chore : this.router.navigate(["/chores"]);
+                if (!chore) {
+                    this.router.navigate(["/chores"]);
+                    return;
+                }
+
+                if (this.editChoreForm && this.editChoreForm.dirty) {                  
+                    let unsavedChore = Object.assign({}, this.chore);
+                    this.saveChangesWarning(unsavedChore);
+                }
+
+                this.chore = chore;
+
             }
         )
         this.route.params.subscribe(
             (params: Params) => {
-                if (this.editChoreForm && this.editChoreForm.dirty && !this.editChoreNgForm.submitted) {
-                    let choreToCheck : Chore = Object.assign({}, this.chore);
-                    console.log("params check", choreToCheck);
-                    this.saveChangesWarning(choreToCheck);
-                }
                 if (params["id"]) {
                     this.choresService.getById(params["id"]);
                 }
@@ -56,10 +59,10 @@ export class EditChoreComponent implements OnInit, OnDestroy {
         });
     }
 
-    onSubmit(choreToSave: Chore) {
-        console.log("chore to save on submit: ", choreToSave);
-        this.choresService.updateChore(choreToSave);
-        this.redirectAfterSubmit ? this.router.navigate(["/chores"]) : this.redirectAfterSubmit = true;
+    onSubmit() {
+        this.submitted = true;
+        this.choresService.updateChore(this.chore);
+        this.router.navigate(["/chores"]);
     }
 
     onCancel() {
@@ -67,39 +70,31 @@ export class EditChoreComponent implements OnInit, OnDestroy {
     }
 
     calculateNextTime() {
-        if (this.chore.lastTime && this.chore.frequency){
+        if (this.chore.lastTime && this.chore.frequency) {
             this.chore.calculateNextTime();
-        }     
-    }    
-
-    saveChangesWarning(choreToSave: Chore) {
-        if (!this.editChoreForm.valid) {
-            this.choresService.getChores(true);
-            this.editChoreForm.reset();
-            return;
         }
-       
+    }
+
+    saveChangesWarning(unsavedChore: Chore) {
         let warningDialogRef = this.warningDialog.open(ConfirmDialogComponent, {
             width: "300px",
-            data: new ConfirmDialogData("Would you like to save your changes first?", "", "Yes, save it", "No, just leave", {})
+            data: new ConfirmDialogData("You have unsaved changes. Would you like to continue editing chore?", "", "Yes, go back", "No, just leave", {})
         })
         warningDialogRef.afterClosed().subscribe(
-            (saveChanges) => {
-                if (saveChanges) {                   
-                    this.redirectAfterSubmit = false;
-                    this.editChoreNgForm.ngSubmit.emit(choreToSave);                  
-                } else {
-                    this.choresService.getChores(true);                 
-                }  
-                this.editChoreForm.markAsPristine();              
+            (continueEditing) => {
+                if (continueEditing) { 
+                    this.router.navigate(["chores", unsavedChore.id, "edit"]);                    
+                } else {                   
+                    this.choresService.getChores(true);
+                }
+                this.editChoreForm.markAsPristine();
             });
     }
 
     ngOnDestroy() {
-        console.log("on destroj", new Date());
-        if (this.editChoreForm && this.editChoreForm.dirty && !this.editChoreNgForm.submitted) {
-            let choreToSave : Chore = Object.assign({}, this.chore);
-            this.saveChangesWarning(choreToSave);
+        if (this.editChoreForm && this.editChoreForm.dirty && !this.submitted) {
+            let unsavedChore: Chore = Object.assign({}, this.chore);
+            this.saveChangesWarning(unsavedChore);                    
         }
         this.gotChoreSubscription.unsubscribe();
     }

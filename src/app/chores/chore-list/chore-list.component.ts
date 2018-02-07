@@ -15,27 +15,26 @@ import { ConfirmDialogData } from "../../shared/dialogs/confirmDialog/confirm-di
     templateUrl: "./chore-list.component.html",
     styleUrls: ["./chore-list.component.css"]
 })
-export class ChoreListComponent implements OnInit, OnDestroy {
-    chores: Chore[];
-    dataSource: MatTableDataSource<Chore>;
+export class ChoreListComponent implements OnInit, OnDestroy {   
+    choresTable: MatTableDataSource<Chore>;
     displayedColumns = ["name", "frequency", "last-time", "next-time", "actions"];
-    subscription: Subscription;
+    choresChangedSubscription: Subscription;
     selectedRowIndex: number = -1;
 
     constructor(private router: Router,
         private route: ActivatedRoute,
-        private choresService: ChoresService,
-        private deleteConfirmDialog: MatDialog) { }
+        private deleteConfirmDialog: MatDialog,
+        private choresService: ChoresService) { }
 
     ngOnInit() {
+        //whenever on only chores (not edit chore) unselect table row
         this.route.url.subscribe(
             (url) => { this.selectedRowIndex = -1; }
         )
 
-        this.subscription = this.choresService.choresChanged.subscribe(
-            (chores: Chore[]) => {
-                this.chores = chores;
-                this.dataSource = new MatTableDataSource(this.chores);
+        this.choresChangedSubscription = this.choresService.choresChanged.subscribe(
+            (chores: Chore[]) => {             
+                this.choresTable = new MatTableDataSource(chores);
             });
 
         this.choresService.getChores(false);
@@ -57,23 +56,21 @@ export class ChoreListComponent implements OnInit, OnDestroy {
 
     private deleteChore(chore) {
         this.choresService.deleteChore(chore);
-        this.router.navigate(["/chores"]);
-        this.selectedRowIndex = -1;
+        this.router.navigate(["/chores"]);    
     }
 
     onDeleteChore(chore: Chore, $event) {
         if ($event.stopPropagation) $event.stopPropagation();
         if ($event.preventDefault) $event.preventDefault();
         $event.cancelBubble = true;
-        this.selectedRowIndex = -1;
-     
+       
         let deleteConfirmDialogRef = this.deleteConfirmDialog.open(ConfirmDialogComponent, {
             width: "300px",
-            data: new ConfirmDialogData("Are you sure you want to delete this chore?", "", "Yes, delete it", "No, go back", chore)
+            data: new ConfirmDialogData("Are you sure you want to delete this chore?", "", "Yes, delete it", "No, go back", {})
         });
         deleteConfirmDialogRef.afterClosed().subscribe(
-            (result) => {
-                if (result) {
+            (confirmed) => {
+                if (confirmed) {
                     this.deleteChore(chore);
                 }
             });
@@ -85,6 +82,6 @@ export class ChoreListComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        this.choresChangedSubscription.unsubscribe();
     }
 }

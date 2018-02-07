@@ -10,7 +10,7 @@
                 <mat-icon class="margin-top-10 clickable" (click)="onCancel()">highlight_off</mat-icon>
             </div>
         </div>
-        <form [formGroup]="editChoreForm" #ngForm="ngForm" (ngSubmit)="onSubmit(chore)">
+        <form [formGroup]="editChoreForm" (ngSubmit)="onSubmit()">
             <mat-form-field>
                 <input matInput type="text" formControlName="name" id="name" name="name" placeholder="Name" [(ngModel)]="chore.name">
             </mat-form-field>

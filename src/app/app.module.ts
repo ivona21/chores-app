@@ -7,7 +7,6 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { ChoresService } from "./chores/chores.service";
 import { AppRouterModule } from "./app-routing.module";
-import { ChoresModule } from './chores/chores.module';
 import { SharedModule } from "./shared/shared.module";
 import { HeaderModule } from './header/header.module';
 import { HomeModule } from "./home/home.module";
@@ -22,8 +21,7 @@ import { HomeModule } from "./home/home.module";
     BrowserAnimationsModule,
     FormsModule,
     HttpModule,
-    AppRouterModule,
-    ChoresModule,
+    AppRouterModule,  
     HeaderModule,
     HomeModule,
     SharedModule

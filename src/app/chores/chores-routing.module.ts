@@ -5,7 +5,7 @@ import { ChoreListComponent } from "./chore-list/chore-list.component";
 import { AddChoreComponent } from "./add-chore/add-chore.component";
 import { EditChoreComponent } from "./edit-chore/edit-chore.component";
 
-const routes : Routes = [ { path: "chores", component: ChoresComponent, children: [
+const routes : Routes = [ { path: "", component: ChoresComponent, children: [
     { path: "chore-management", component: ChoreListComponent },
     { path: "new", component: AddChoreComponent },
     { path: ":id/edit", component: EditChoreComponent }

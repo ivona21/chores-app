@@ -7,10 +7,7 @@ import { ChoreListComponent } from "./chore-list/chore-list.component";
 import { AddChoreComponent } from "./add-chore/add-chore.component";
 import { EditChoreComponent } from "./edit-chore/edit-chore.component";
 import { ChoresRoutingModule } from "./chores-routing.module";
-import { CustomMaterialModule } from "../custom-material.module";
 import { SharedModule } from "../shared/shared.module";
-
-
 
 @NgModule({
     declarations: [ 
@@ -21,15 +18,11 @@ import { SharedModule } from "../shared/shared.module";
     ],
     imports: [
         CommonModule,
-        ChoresRoutingModule,
-        CustomMaterialModule,
+        ChoresRoutingModule,       
         FormsModule,
         ReactiveFormsModule,
         SharedModule
-    ],
-    exports: [
-
-    ]   
+    ]    
 })
 export class ChoresModule {
 

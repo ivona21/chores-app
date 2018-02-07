@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ConfirmDialogComponent } from "./dialogs/confirmDialog/confirm-dialog.component";
-import { CustomMaterialModule } from "../custom-material.module";
+import { CustomMaterialModule } from "./custom-material.module";
 
 @NgModule({
     entryComponents: [
@@ -9,12 +9,13 @@ import { CustomMaterialModule } from "../custom-material.module";
     ],
     declarations: [
         ConfirmDialogComponent
-    ],
+    ],   
     imports: [
         CustomMaterialModule
     ],
     exports: [
-        CommonModule,        
+        CommonModule,   
+        CustomMaterialModule,     
         ConfirmDialogComponent
     ]
 })

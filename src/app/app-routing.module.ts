@@ -7,13 +7,7 @@ import { AddChoreComponent } from "./chores/add-chore/add-chore.component";
 import { EditChoreComponent } from "./chores/edit-chore/edit-chore.component";
 
 const appRoutes : Routes = [
-    { path: "", component: HomeComponent },
-    { path: "chores", component: ChoresComponent, children: [
-        { path: "chore-management", component: ChoreListComponent },
-        { path: "new", component: AddChoreComponent },
-        { path: ":id/edit", component: EditChoreComponent }
-    ] }
-   
+    { path: "", component: HomeComponent }  
 ]
 
 @NgModule({

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Http, Response } from "@angular/http";
+import { HttpClient } from "@angular/common/http";
 import { Subject } from "rxjs/Subject";
 import { Subscription } from "rxjs/Subscription";
 import { Observable } from "rxjs/Observable";
@@ -14,7 +14,7 @@ export class ChoresService {
     chores: Chore[] = [];
     choresChangesSubscription: Subscription;
 
-    constructor(private http: Http) { }
+    constructor(private http: HttpClient) { }
 
     getChores(fromServer: boolean): void {      
         if (this.chores.length > 0 && !fromServer) {          
@@ -22,14 +22,13 @@ export class ChoresService {
             return;
         } else {
             this.http.get(this.url + "chores.json").subscribe(
-                (response: Response) => {
-                    let responseBody = JSON.parse(response["_body"]);
-                    this.chores = Object.keys(responseBody).map((key) => {
+                (response) => {                    
+                    this.chores = Object.keys(response).map((key) => {
                         let chore = new Chore(
                             key,
-                            responseBody[key].name,
-                            responseBody[key].frequency,
-                            new Date(responseBody[key].lastTime))
+                            response[key].name,
+                            response[key].frequency,
+                            new Date(response[key].lastTime))
 
                         return chore;
                     });
@@ -62,8 +61,8 @@ export class ChoresService {
 
     addChore(choreToInsert: Chore) {
         this.http.post(this.url + "chores.json", choreToInsert).subscribe(
-            (response: Response) => {
-                let key = JSON.parse(response["_body"]).name;
+            (response) => {              
+                let key = response["name"];
                 let insertedChore: Chore = new Chore(key, choreToInsert.name, choreToInsert.frequency, choreToInsert.lastTime);
                 this.chores.push(insertedChore);
                 this.choresChanged.next(this.chores.slice());
@@ -76,10 +75,9 @@ export class ChoresService {
         let updateUrl = this.url + "chores/" + chore.id + ".json";
         let choreToUpdate: Chore = new Chore(chore.id, chore.name, chore.frequency, new Date(chore.lastTime));
         this.http.put(updateUrl, choreToUpdate).subscribe(
-            (response: Response) => {
-                let responseBody = JSON.parse(response["_body"]);
+            (response) => {              
                 let updatedChore: Chore = new Chore(
-                    responseBody.id, responseBody.name, responseBody.frequency, new Date(responseBody.lastTime)
+                    response["id"], response["name"], response["frequency"], new Date(response["lastTime"])
                 );
                 this.chores[index] = updatedChore;
                 this.choresChanged.next(this.chores.slice());

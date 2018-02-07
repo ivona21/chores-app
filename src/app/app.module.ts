@@ -5,11 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { ChoresService } from "./chores/chores.service";
-import { AppRouterModule } from "./app-routing.module";
-import { SharedModule } from "./shared/shared.module";
-import { HeaderModule } from './header/header.module';
-import { HomeModule } from "./home/home.module";
+import { CoreModule } from "./core/core.module";
 
 
 @NgModule({
@@ -20,13 +16,10 @@ import { HomeModule } from "./home/home.module";
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    HttpModule,
-    AppRouterModule,  
-    HeaderModule,
-    HomeModule,
-    SharedModule
+    HttpModule,   
+    CoreModule   
   ],
-  providers: [ChoresService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

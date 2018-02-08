@@ -9,6 +9,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from "@angular/material";
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
     imports: [
@@ -21,7 +22,8 @@ import { MatDialogModule } from '@angular/material/dialog';
         MatDatepickerModule,
         MatNativeDateModule,
         MatIconModule,
-        MatDialogModule
+        MatDialogModule,
+        MatSortModule
     ],
     exports: [
         MatButtonModule,
@@ -33,7 +35,8 @@ import { MatDialogModule } from '@angular/material/dialog';
         MatDatepickerModule,
         MatNativeDateModule,
         MatIconModule,
-        MatDialogModule
+        MatDialogModule,
+        MatSortModule
     ]
 })
 export class CustomMaterialModule {

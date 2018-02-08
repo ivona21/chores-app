@@ -1,1 +1,20 @@
-<h1>Login</h1>
+<div fxLayout="row" class="margin-top-30">  
+    <div fxFlexOffset="30" fxFlex="40">
+        <div>
+            <section class="mat-typography">
+                <h1> Login </h1>
+            </section>
+        </div>
+        <div class="form-container mat-elevation-z5">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <mat-form-field>
+                    <input matInput type="text" id="username" name="username" formControlName="username" placeholder="username" />
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput type="password" id="password" name="password" formControlName="password" placeholder="password" />
+                </mat-form-field>
+                <button mat-raised-button color="accent" type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+</div>

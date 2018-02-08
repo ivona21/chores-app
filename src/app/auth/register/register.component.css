@@ -1,3 +1,19 @@
-h1 {
-    font-size: 72px;
+mat-form-field {
+    width: 100%;
+}
+
+form {
+    padding: 20px;
+}
+
+form * {
+    font-size: 14px;
+}
+
+.form-container {
+    padding-bottom: 40px;
+}
+
+button {
+    float: right;
 }
